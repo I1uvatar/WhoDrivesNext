@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WhoDrivesNextConsoleClient.Model
+namespace WhoDrivesNext.Core.Model
 {
     public class GroupScore
     {

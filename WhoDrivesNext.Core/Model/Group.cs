@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WhoDrivesNextConsoleClient.Model
+namespace WhoDrivesNext.Core.Model
 {
     public class Group
     {

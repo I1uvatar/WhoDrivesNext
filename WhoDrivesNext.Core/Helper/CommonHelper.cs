@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WhoDrivesNextConsoleClient.Model;
+using WhoDrivesNext.Core.Model;
 
-namespace WhoDrivesNextConsoleClient.Helper
+namespace WhoDrivesNext.Core.Helper
 {
-    class CommonHelper
+    public class CommonHelper
     {
         public static string WriteOutPersons(List<Person> persons)
         {
@@ -38,6 +38,6 @@ namespace WhoDrivesNextConsoleClient.Helper
         public static Person FindPersonById(Guid id, List<Person> persons)
         {
             return persons.Find(p => p.PersonId == id);
-        }
+        }        
     }
 }

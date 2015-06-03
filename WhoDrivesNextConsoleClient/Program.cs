@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WhoDrivesNextConsoleClient.Helper;
-using WhoDrivesNextConsoleClient.Model;
+using WhoDrivesNext.Core;
+using WhoDrivesNext.Core.Model;
+using WhoDrivesNext.Core.Helper;
+
 
 namespace WhoDrivesNextConsoleClient
 {
     class Program
     {
-        private static List<Person> _persons;
-        private static List<Group> _groups;
-        private static List<GroupScore> _groupScores;
+        private static ApplicationCore _appCore;
 
         static void Main(string[] args)
         {
+            _appCore = new ApplicationCore();
             FirstTimeStarted();
             var prompt = -1;
             while (prompt != 0)
             {
-                prompt = DisplayMainMenu(prompt);
+                prompt = DisplayMainMenu();
                 ProccessCommand(prompt);
             }
             
@@ -43,7 +44,7 @@ namespace WhoDrivesNextConsoleClient
                 return;
             }
 
-            _persons = new List<Person>();
+           
 
             for (int i = 0; i < personNum; i++)
             {
@@ -57,23 +58,10 @@ namespace WhoDrivesNextConsoleClient
                 Console.Write("Last name: ");
                 userInput = Console.ReadLine();
                 person.LastName = userInput;
-                _persons.Add(person);
+                _appCore.AddPerson(person);
             }
-
-
-            //generating all posible group combinations but take only those who has 2 or more members
-            var generatedGroups = CombinationsHelper.ProduceList(_persons).Where(i => i.Count >= 2).ToList();
-            _groups = new List<Group>();
-            foreach (var generatedGroup in generatedGroups)
-            {
-                var group = new Group() {GroupId = Guid.NewGuid()};
-                group.Name = CommonHelper.ExtractGroupNameFromGroup(generatedGroup);
-                group.Persons = generatedGroup;
-
-                _groups.Add(group);
-            }
-
-            _groupScores = _groups.Select(group => new GroupScore(group)).ToList();
+            
+            _appCore.InitialGroupAndScoresGeneration();
         }
 
         private static void FirstTimeStarted()
@@ -97,8 +85,7 @@ namespace WhoDrivesNextConsoleClient
                 return;
             }
 
-            var peronId = score.PersonPoints.OrderByDescending(kp => kp.Value).FirstOrDefault().Key.PersonId;
-            var personWhoDrivesNext = CommonHelper.FindPersonById(peronId, _persons);
+            var personWhoDrivesNext = _appCore.GetPersonWhoDrivesNextByScore(score);
             Console.WriteLine("Next person who drives is: {0}",
                 personWhoDrivesNext.FirstName + " " + personWhoDrivesNext.LastName);
 
@@ -127,7 +114,7 @@ namespace WhoDrivesNextConsoleClient
             p.FirstName = Console.ReadLine();
             Console.Write("Last name: ");
             p.LastName = Console.ReadLine();
-            var foundPerson = CommonHelper.FindPersonByName(p.FirstName, p.LastName, _persons);
+            var foundPerson = CommonHelper.FindPersonByName(p.FirstName, p.LastName, _appCore.Persons);
             if (foundPerson == null)
             {
                 Console.WriteLine("Can't find person with name {0}.\nPress <enter> to skip to main menu", p.FirstName + " " + p.LastName);
@@ -136,10 +123,16 @@ namespace WhoDrivesNextConsoleClient
             }
             p.PersonId = foundPerson.PersonId;
 
-            score.AddScoreToGroupMembers(p);
-
-            Console.WriteLine("Trip sucessfuly added. Press <enter> to return to main menu.");
-            Console.ReadLine();                    
+            if (_appCore.AddTripToScore(score, p))
+            {
+                Console.WriteLine("Trip sucessfuly added. Press <enter> to return to main menu.");
+                Console.ReadLine();                        
+            }
+            else
+            {
+                Console.WriteLine("Trip was not sucessfuly added. Press <enter> to return to main menu.");
+                Console.ReadLine();                        
+            }            
         }
 
         private static void AddNewPersonAndRegenerateGroups()
@@ -156,28 +149,8 @@ namespace WhoDrivesNextConsoleClient
             Console.Write("Last name: ");
             userInput = Console.ReadLine();
             person.LastName = userInput;
-            _persons.Add(person);
-
-            //generating all posible group combinations but take only those who has 2 or more members
-            var generatedGroups = CombinationsHelper.ProduceList(_persons).Where(i => i.Count >= 2).ToList();
+            _appCore.AddPersonAndRegenerateGroupsAndScores(person);
             
-            
-            var grp = new List<Group>();
-            foreach (var generatedGroup in generatedGroups)
-            {
-                var group = new Group() { GroupId = Guid.NewGuid() };
-                group.Name = CommonHelper.ExtractGroupNameFromGroup(generatedGroup);
-                group.Persons = generatedGroup;
-
-                grp.Add(group);
-            }
-
-            var newGroups = grp.FindAll(g => _groups.Find(e => e.Name == g.Name) == null).ToList();
-            var newGroupScores = newGroups.Select(group => new GroupScore(group)).ToList();
-
-            _groups.AddRange(newGroups);
-            _groupScores.AddRange(newGroupScores);
-
             Console.WriteLine("New person sucessfuly added. New groups and scores added. Press <enter> to return to main menu.");
             Console.ReadLine();
         }
@@ -193,7 +166,7 @@ namespace WhoDrivesNextConsoleClient
             var sb = new StringBuilder();
             foreach (var group in groups)
             {
-                sb.AppendLine(string.Format(groupFromatString, @group.Name, CommonHelper.WriteOutPersons(@group.Persons)));
+                sb.AppendLine(string.Format(groupFromatString, group.Name, CommonHelper.WriteOutPersons(group.Persons)));
             }
 
             return sb.ToString();
@@ -202,12 +175,12 @@ namespace WhoDrivesNextConsoleClient
         private static GroupScore DisplayGroupsAndReturnScoreByGroupName()
         {
             Console.WriteLine("Available groups:");
-            WriteOutGroupsToConsole(_groups);
+            WriteOutGroupsToConsole(_appCore.Groups);
 
             Console.Write("Enter group name: ");
             var userInput = Console.ReadLine();
 
-            var score = _groupScores.Find(gs => gs.ScoreForGroup.Name.ToLower() == userInput.ToLower());
+            var score = _appCore.GetScroreByGroupName(userInput);
             return score;
         }
 
@@ -219,7 +192,7 @@ namespace WhoDrivesNextConsoleClient
 
         #endregion
 
-        #region Menu plubmbing
+        #region Menu plumbing
 
         private static void ProccessCommand(int prompt)
         {
@@ -233,14 +206,14 @@ namespace WhoDrivesNextConsoleClient
                 case 2:
                     Console.Clear();
                     Console.WriteLine("List of persons....");
-                    WriteOutPersonsToCosole(_persons);
+                    WriteOutPersonsToCosole(_appCore.Persons);
                     Console.Write("Press <enter> to return to main menu.");
                     Console.ReadLine();
                     break;
                 case 3:
                     Console.Clear();
                     Console.WriteLine("List of groups....");
-                    WriteOutGroupsToConsole(_groups);
+                    WriteOutGroupsToConsole(_appCore.Groups);
                     Console.Write("Press <enter> to return to main menu.");
                     Console.ReadLine();
                     break;
@@ -256,7 +229,7 @@ namespace WhoDrivesNextConsoleClient
             }
         }
 
-        private static int DisplayMainMenu(int prompt)
+        private static int DisplayMainMenu()
         {
             Console.Clear();
             Console.WriteLine("Initial setup--------------------------------<1>");

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WhoDrivesNextConsoleClient.Model;
+using WhoDrivesNext.Core.Model;
 
-namespace WhoDrivesNextConsoleClient.Helper
+namespace WhoDrivesNext.Core.Helper
 {
     class CombinationsHelper
     {
