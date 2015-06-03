@@ -40,12 +40,6 @@ You can contribute to the code with opening a pull request.
 I will check every pull request and add it to the branch if the changes are appropriate.  
 Later in the time I plan to take use of the GitHub Issue system, so you can make your contributions regarding a certain issue or open a new one.
 
-###Contributions
-All kind of help is welcome.  
-You can contribute to the code with opening a pull request.  
-I will check every pull request and add it to the branch if the changes are appropriate.  
-Later in the time I plan to take use of the GitHub Issue system, so you can make your contributions regarding a certain issue or open a new one.
-
 ###Donations
 All donations are greatly appreciated. The donations will go towards Google Play membership fee.  
 You can make a donation via PayPal [here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=F8UN2XV4LFEX6).  
