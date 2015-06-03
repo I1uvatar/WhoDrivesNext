@@ -142,6 +142,46 @@ namespace WhoDrivesNextConsoleClient
             Console.ReadLine();                    
         }
 
+        private static void AddNewPersonAndRegenerateGroups()
+        {
+            Console.Clear();
+            var userInput = string.Empty;
+
+            Console.WriteLine("Enter the information for person....");
+            var person = new Person() { PersonId = Guid.NewGuid() };
+            Console.Write("First name: ");
+            userInput = Console.ReadLine();
+            person.FirstName = userInput;
+
+            Console.Write("Last name: ");
+            userInput = Console.ReadLine();
+            person.LastName = userInput;
+            _persons.Add(person);
+
+            //generating all posible group combinations but take only those who has 2 or more members
+            var generatedGroups = CombinationsHelper.ProduceList(_persons).Where(i => i.Count >= 2).ToList();
+            
+            
+            var grp = new List<Group>();
+            foreach (var generatedGroup in generatedGroups)
+            {
+                var group = new Group() { GroupId = Guid.NewGuid() };
+                group.Name = CommonHelper.ExtractGroupNameFromGroup(generatedGroup);
+                group.Persons = generatedGroup;
+
+                grp.Add(group);
+            }
+
+            var newGroups = grp.FindAll(g => _groups.Find(e => e.Name == g.Name) == null).ToList();
+            var newGroupScores = newGroups.Select(group => new GroupScore(group)).ToList();
+
+            _groups.AddRange(newGroups);
+            _groupScores.AddRange(newGroupScores);
+
+            Console.WriteLine("New person sucessfuly added. New groups and scores added. Press <enter> to return to main menu.");
+            Console.ReadLine();
+        }
+
         private static void WriteOutPersonsToCosole(List<Person> persons)
         {
             if(persons != null) Console.WriteLine(CommonHelper.WriteOutPersons(persons));
@@ -210,6 +250,9 @@ namespace WhoDrivesNextConsoleClient
                 case 5:
                     DisplayWhoDrivesNext();
                     break;
+                case 6:
+                    AddNewPersonAndRegenerateGroups();
+                    break;
             }
         }
 
@@ -221,6 +264,7 @@ namespace WhoDrivesNextConsoleClient
             Console.WriteLine("Display groups-------------------------------<3>");
             Console.WriteLine("Enter trip into group------------------------<4>");
             Console.WriteLine("Who drivers next in group--------------------<5>");
+            Console.WriteLine("Add new person-------------------------------<6>");
             Console.WriteLine("Quit-----------------------------------------<0>");
             Console.Write("\nEnter: ");
             var userChoice = Console.ReadLine();
