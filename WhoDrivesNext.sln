@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhoDrivesNextConsoleClient", "WhoDrivesNextConsoleClient\WhoDrivesNextConsoleClient.csproj", "{DB411621-3B8B-4017-AC3E-F72A72A4F2DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhoDrivesNext.Core", "WhoDrivesNext.Core\WhoDrivesNext.Core.csproj", "{9E027399-92B4-419A-8930-1CF4CB09F478}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhoDrivesNext.Droid", "WhoDrivesNext.Droid\WhoDrivesNext.Droid.csproj", "{CE2197A6-D0DB-4851-A95B-CF59F489616E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{9E027399-92B4-419A-8930-1CF4CB09F478}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E027399-92B4-419A-8930-1CF4CB09F478}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E027399-92B4-419A-8930-1CF4CB09F478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE2197A6-D0DB-4851-A95B-CF59F489616E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

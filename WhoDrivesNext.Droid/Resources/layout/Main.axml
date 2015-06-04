@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <Button
+        android:id="@+id/initialSetupButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/InitialSetup" />
+    <Button
+        android:text="@string/Persons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/personsButton" />
+    <Button
+        android:text="@string/Groups"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupsButton" />
+    <Button
+        android:text="@string/AddTrip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addTripButton" />
+    <Button
+        android:text="@string/WhoDrivesNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/whoDrivesNextButton" />
+</LinearLayout>

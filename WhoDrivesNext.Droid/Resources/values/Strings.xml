@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="InitialSetup">Initial setup</string>
+  <string name="Persons">Persons</string>
+  <string name="Groups">Groups</string>
+  <string name="AddTrip">Add trip</string>
+  
+    <string name="ApplicationName">WhoDrivesNext</string>
+  <string name="WhoDrivesNext">Who drives next?</string>
+</resources>
