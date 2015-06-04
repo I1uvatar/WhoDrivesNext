@@ -7,11 +7,18 @@ namespace WhoDrivesNext.Core.Model
     {
         public Dictionary<Person,int> PersonPoints { get; set; }
         public Group ScoreForGroup { get; set; }
+        public GroupPersonPoint GroupPersonPoint { get; set; }
 
         public GroupScore(Group group)
         {
             ScoreForGroup = group;
             InitializeScoreFromGroup();
+        }
+
+        public GroupScore(Group group, List<GroupPersonPoint> gpPoints)
+        {
+            ScoreForGroup = group;
+            InitializeScoreFromGroup(gpPoints);
         }
         
         public void ResetAllPersonPoints()
@@ -26,6 +33,17 @@ namespace WhoDrivesNext.Core.Model
             foreach (var person in ScoreForGroup.Persons)
             {
                 PersonPoints.Add(person,0);
+            }
+        }
+
+        public void InitializeScoreFromGroup(List<GroupPersonPoint> gpp)
+        {
+            PersonPoints = new Dictionary<Person, int>();
+            foreach (var person in ScoreForGroup.Persons)
+            {
+                var personPointsInGroup = gpp.Find(pp => pp.GroupName.ToLower() == ScoreForGroup.Name.ToLower() && pp.PersonId == person.PersonId);
+
+                PersonPoints.Add(person, personPointsInGroup != null ? personPointsInGroup.Score : 0);
             }
         }
 

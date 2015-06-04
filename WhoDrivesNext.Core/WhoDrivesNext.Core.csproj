@@ -41,13 +41,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationCore.cs" />
+    <Compile Include="DataAccessLayer\EntitiesRepository.cs" />
+    <Compile Include="DataLayer\SQLite.cs" />
+    <Compile Include="DataLayer\AppDatabase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Helper\CombinationsHelper.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
+    <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="Model\PersistentEntityBase.cs" />
     <Compile Include="Model\Group.cs" />
+    <Compile Include="Model\GroupPersonPoint.cs" />
     <Compile Include="Model\GroupScore.cs" />
+    <Compile Include="Model\IPersistentEntity.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using WhoDrivesNext.Core.Helper;
+using WhoDrivesNext.Core.Managers;
 using WhoDrivesNext.Core.Model;
 
 namespace WhoDrivesNext.Core
@@ -11,6 +13,8 @@ namespace WhoDrivesNext.Core
         private  List<Person> _persons;
         private  List<Group> _groups;
         private  List<GroupScore> _groupScores;
+        private List<GroupPersonPoint> _groupPerPoints;
+        private bool _initFromDatabase = false;
 
         public ApplicationCore()
         {
@@ -22,6 +26,42 @@ namespace WhoDrivesNext.Core
             _persons = new List<Person>();
             _groups = new List<Group>();
             _groupScores = new List<GroupScore>();
+            _groupPerPoints = new List<GroupPersonPoint>();
+
+            //NOTE: Currently not working. Complaints about a missing dll.
+            //InitializeFromDatabase();
+        }
+
+        private void InitializeFromDatabase()
+        {
+            _persons = EntityManager.GetPersons().ToList();           
+            _groupPerPoints = EntityManager.GetGroupPersonPoints().ToList();
+
+            InitialGroupAndScoresGeneration();
+        }
+
+        public bool PersistAllEntities()
+        {
+            SavePersonCollection(_persons);
+            SaveGroupPersonPointCollection(_groupPerPoints);
+
+            return true;
+        }
+
+        private void SaveGroupPersonPointCollection(List<GroupPersonPoint> groupPerPoints)
+        {
+            foreach (var groupPersonPoint in groupPerPoints)
+            {
+                EntityManager.SaveGroupPersonPoint(groupPersonPoint);
+            }
+        }
+
+        private void SavePersonCollection(List<Person> persons)
+        {
+            foreach (var person in persons)
+            {
+                EntityManager.SavePerson(person);
+            }
         }
 
         public List<Person> Persons
@@ -40,6 +80,18 @@ namespace WhoDrivesNext.Core
         {
             get { return _groupScores; }
             set { _groupScores = value; }
+        }
+
+        public List<GroupPersonPoint> GroupPerPoints
+        {
+            get { return _groupPerPoints; }
+            set { _groupPerPoints = value; }
+        }
+
+        public bool InitFromDatabase
+        {
+            get { return _initFromDatabase; }
+            set { _initFromDatabase = value; }
         }
 
         public void AddPerson(Person person)
@@ -61,7 +113,7 @@ namespace WhoDrivesNext.Core
                 _groups.Add(group);
             }
 
-            _groupScores = _groups.Select(group => new GroupScore(group)).ToList();
+            _groupScores = _groups.Select(group => new GroupScore(group,_groupPerPoints)).ToList();
         }
 
         public GroupScore GetScroreByGroupName(string groupName)
@@ -131,6 +183,7 @@ namespace WhoDrivesNext.Core
             AddPerson(person);
             RegenerateGroupsAndScores();
         }
+
     
     }
 }

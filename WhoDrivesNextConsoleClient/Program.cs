@@ -16,6 +16,7 @@ namespace WhoDrivesNextConsoleClient
         static void Main(string[] args)
         {
             _appCore = new ApplicationCore();
+            //_appCore.InitFromDatabase = true;
             FirstTimeStarted();
             var prompt = -1;
             while (prompt != 0)
@@ -62,6 +63,7 @@ namespace WhoDrivesNextConsoleClient
             }
             
             _appCore.InitialGroupAndScoresGeneration();
+            
         }
 
         private static void FirstTimeStarted()
@@ -226,6 +228,11 @@ namespace WhoDrivesNextConsoleClient
                 case 6:
                     AddNewPersonAndRegenerateGroups();
                     break;
+                //case 10:
+                //    _appCore.PersistAllEntities();
+                //    Console.WriteLine("State succesfuly saved into database. Press <enter> to continue");
+                //    Console.ReadLine();
+                //    break;
             }
         }
 
@@ -238,6 +245,7 @@ namespace WhoDrivesNextConsoleClient
             Console.WriteLine("Enter trip into group------------------------<4>");
             Console.WriteLine("Who drivers next in group--------------------<5>");
             Console.WriteLine("Add new person-------------------------------<6>");
+            //Console.WriteLine("Save state to database----------------------<10>");
             Console.WriteLine("Quit-----------------------------------------<0>");
             Console.Write("\nEnter: ");
             var userChoice = Console.ReadLine();
